@@ -2,8 +2,8 @@
 #'
 #' This function allows you to draw the XmR summary plot.
 #' @param data Comma-separated (*.csv), QC file format. It should contain a Precursor column and the metrics columns.
-#' @param L Lower bound of the giude set
-#' @param U Upper bound of the guide set
+#' @param L Lower bound of the giude set. Default is 1.
+#' @param U Upper bound of the guide set. Default is 5.
 #' @keywords XmR
 #'           Summary plot
 #' @export
@@ -12,14 +12,12 @@
 #' @import grid
 #' @examples
 #' XmRSummaryPlots()
-XmRSummaryPlots <- function(data, L, U) {
-  #data <- input_checking(data)
-  #data <- DataProcess(data)
+XmRSummaryPlots <- function(data, L=1, U=5) {
+
    if(!is.data.frame(data)){
     stop(data)
   }
-  data.metrics <- c("Retention Time", "Total Peak Area",
-                    "Full Width at Half Maximum", "Peak Assymetry", find_custom_metrics(data))
+  data.metrics <- c(find_custom_metrics(data))
   dat <- XmR.Summary.DataFrame(data,data.metrics, L, U)
   tho.hat.df <- get_CP_tho.hat(data, L, U, data.metrics)
 
@@ -64,8 +62,8 @@ XmRSummaryPlots <- function(data, L, U) {
 #'
 #' This function allows you to draw the CUSUM summary plot.
 #' @param data Comma-separated (*.csv), QC file format. It should contain a Precursor column and the metrics columns.
-#' @param L Lower bound of the giude set
-#' @param U Upper bound of the guide set
+#' @param L Lower bound of the giude set. Default is 1.
+#' @param U Upper bound of the guide set. Default is 5.
 #' @keywords CUSUM
 #'           Summary plot
 #' @export
@@ -73,15 +71,13 @@ XmRSummaryPlots <- function(data, L, U) {
 #' @import RecordLinkage
 #' @examples
 #' CUSUMSummaryPlots()
-CUSUMSummaryPlots <- function(data, L, U) {
-  #data <- input_checking(data)
-  #data <- DataProcess(data)
+CUSUMSummaryPlots <- function(data, L = 1, U = 5) {
+
   if(!is.data.frame(data)){
     stop(data)
   }
   h <- 5
-  data.metrics <- c("Retention Time", "Total Peak Area",
-                    "Full Width at Half Maximum", "Peak Assymetry", find_custom_metrics(data))
+  data.metrics <- c(find_custom_metrics(data))
 
   dat <- CUSUM.Summary.DataFrame(data, data.metrics, L, U)
   tho.hat.df <- get_CP_tho.hat(data, L, U, data.metrics)
